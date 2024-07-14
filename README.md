@@ -5,16 +5,16 @@ The model is based on the lstm model from the paper "Recurrent Convolutional Neu
 ## project structure
 
     ├── README.md
+    ├── data
+    │   ├── catalogues
+    │   │   ├── originalCat.csv                         -> dataset with aftershocks
+    │   │   └── withoutAftCat.csv                       -> dataset without aftershocks
+    │   └── jp_map.png
     ├── baseline                                        -> naive baselines
     │   ├── baseline.ipynb                              -> notebook with baselines
     │   ├── baselines.py                                -> implementation of baseline classes
     │   ├── constants.py
     │   └── utils.py
-    ├── data
-    │   ├── catalogues
-    │   │   ├── originalCat.csv                         -> dataset without aftershocks
-    │   │   └── withoutAftCat.csv                       -> dataset with aftershocks
-    │   └── jp_map.png
     └── src
         ├── Dataset_creation_orig_paper.ipynb           -> dataset creation for lstm model from original paper
         ├── Dataset_creation_two_catalogs.ipynb         -> dataset creation for two datasets (data/catalogues/*.csv)
