@@ -8,7 +8,7 @@ The lstm model is based on the lstm model from the paper "Recurrent Convolutiona
 
     ├── README.md
     ├── data
-    │   ├── catalogues
+    │   ├── catalogues                                  -> source datasets (could be downloaded from cloud)
     │   │   ├── originalCat.csv                         -> dataset with aftershocks
     │   │   └── withoutAftCat.csv                       -> dataset without aftershocks
     │   └── jp_map.png
@@ -18,6 +18,10 @@ The lstm model is based on the lstm model from the paper "Recurrent Convolutiona
     │   ├── constants.py
     │   └── utils.py
     ├── classic_models
+    ├── data/models                                     -> trained models in pickle
+        │   ├── *.pickle
+    ├── data/dataset
+        │   ├── *.parquet                               -> dataset for classic ml models in parquet (could be downloaded from cloud)
     │   ├── requirements.txt
     │   ├── constants.py
     │   ├── collect_dataset.py                          -> dataset creation for classical ml models
@@ -42,5 +46,6 @@ The lstm model is based on the lstm model from the paper "Recurrent Convolutiona
 
 ## datasets
 
-- dataset with aftershocks: `https://disk.yandex.ru/d/KpWoteZyrx8nyA`
-- dataset without aftershocks: `https://disk.yandex.ru/d/UKgbIfYor1R84Q`
+- source dataset with aftershocks: `https://disk.yandex.ru/d/KpWoteZyrx8nyA`
+- source dataset without aftershocks: `https://disk.yandex.ru/d/UKgbIfYor1R84Q`
+- dataset for classic ml models: `https://disk.yandex.ru/d/cSx_6Ek01x_LhQ`
