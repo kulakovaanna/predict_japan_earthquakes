@@ -1,6 +1,8 @@
-# lstm_earthquakes
+# predict_japan_earthquakes
 
-The model is based on the lstm model from the paper "Recurrent Convolutional Neural Networks help to predict location of Earthquakes" (Roman Kail, Alexey Zaytsev, Evgeny Burnaev).
+In the predict_japan_earthquakes repository represented code for naive baselines, classical ml and lstm models for predicting earthquakes in Japan, utilising two earthquake catalogues containing data from 2004 to 2023. One catalogue includes data with aftershocks, while the other excludes them. The data has been thresholded at magnitudes 3.5 and 6, as the prediction of earthquakes of higher magnitude is a more challenging undertaking.
+
+The lstm model is based on the lstm model from the paper "Recurrent Convolutional Neural Networks help to predict location of Earthquakes" (Roman Kail, Alexey Zaytsev, Evgeny Burnaev).
 
 ## project structure
 
@@ -15,7 +17,17 @@ The model is based on the lstm model from the paper "Recurrent Convolutional Neu
     │   ├── baselines.py                                -> implementation of baseline classes
     │   ├── constants.py
     │   └── utils.py
-    └── src
+    ├── classic_models
+    │   ├── requirements.txt
+    │   ├── constants.py
+    │   ├── collect_dataset.py                          -> dataset creation for classical ml models
+    │   ├── train.py                                    \
+    │   ├── utils.py                                    -> utilities for classical ml models
+    │   ├── ml_utils.py                                 /
+    │   ├── merge_features.ipynb                        -> notebook for merging collected features via collect_dataset.py in datasets
+    │   ├── ml-models_magn_3_5.ipynb                    -> boosting models for earthquakes harder than magnitude 3.5
+    │   └── validation.ipynb                            -> validating result boosting models
+    └── lstm_models
         ├── Dataset_creation_orig_paper.ipynb           -> dataset creation for lstm model from original paper
         ├── Dataset_creation_two_catalogs.ipynb         -> dataset creation for two datasets (data/catalogues/*.csv)
         ├── experiments                                 -> notebooks with experiments
