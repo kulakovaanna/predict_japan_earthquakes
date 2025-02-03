@@ -1,6 +1,6 @@
 # predict_japan_earthquakes
 
-In the predict_japan_earthquakes repository represented code for naive baselines, classical ml and lstm models for predicting earthquakes in Japan, utilising two earthquake catalogues containing data from 2004 to 2023. One catalogue includes data with aftershocks, while the other excludes them. The data has been thresholded at magnitudes 3.5 and 6, as the prediction of earthquakes of higher magnitude is a more challenging undertaking.
+In the predict_japan_earthquakes repository contains code for naive baselines, classical ml and lstm models for predicting earthquakes in Japan, utilising two earthquake catalogues containing data from 2004 to 2023. One catalogue includes data with aftershocks, while the other excludes them. The data has been thresholded at magnitudes 3.5 and 6, as the prediction of earthquakes of higher magnitude is a more challenging undertaking.
 
 The lstm model is based on the lstm model from the paper "Recurrent Convolutional Neural Networks help to predict location of Earthquakes" (Roman Kail, Alexey Zaytsev, Evgeny Burnaev).
 
