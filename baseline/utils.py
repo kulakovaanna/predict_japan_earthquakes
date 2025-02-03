@@ -1,13 +1,15 @@
 import os
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import (
-    roc_auc_score, roc_curve, auc,
+    roc_auc_score, roc_curve, auc, confusion_matrix,
     average_precision_score, precision_recall_curve,
     RocCurveDisplay, PrecisionRecallDisplay
 )
+from tqdm import tqdm
 
-from constants import MAP_PATH, FIGSIZE, BBOX, N_CELLS_HOR, N_CELLS_VER, DPI
+from constants import MAP_PATH, FIGSIZE, BBOX, N_CELLS_HOR, N_CELLS_VER, DPI, DATA_ORIG_PATH
 
 
 def preprocess_time(year, month, day, hour, minute, s):
@@ -222,3 +224,46 @@ def plot_events(x, y, map_path=MAP_PATH, figsize=FIGSIZE, bbox=BBOX):
     fig, ax = plt.subplots(figsize=(figsize, figsize * map_img.shape[0] / map_img.shape[1]), dpi=DPI)
     ax.imshow(map_img, zorder=0, extent=bbox);
     plt.scatter(x, y, marker="x", c="k");
+
+def get_tpr_fpr(y_true, y_pred, sample_weight=None, n=25):
+    tpr, fpr = [], []
+    full_trs_list_ = [-0.001] + np.unique(y_pred).tolist() + [1.001]
+    trs_list_ = np.linspace(-0.001, 1.001, n)
+    trs_list = trs_list_ if len(trs_list_) < len(full_trs_list_) else full_trs_list_
+
+    for trs in tqdm(trs_list, leave=False):
+        y_pred_ = np.array(y_pred >= trs, dtype=int)
+        cm = confusion_matrix(y_true, y_pred_, sample_weight=None)
+        if sample_weight is not None:
+            cm_w = confusion_matrix(y_true, y_pred_, sample_weight=sample_weight)
+    
+        if sample_weight is None:
+            tn, fp, fn, tp = cm.ravel()
+        else:
+            _, _, fn, tp = cm.ravel()
+            tn, fp, _, _ = cm_w.ravel()
+            
+        tpr_ = tp / (tp+fn)
+        fpr_ = fp / (fp+tn)
+        tpr.append(tpr_)
+        fpr.append(fpr_)
+
+    return tpr, fpr
+
+def weighted_fpr_roc(y_true, y_pred, weights_for_roc_auc, n=25):
+    tpr, fpr = get_tpr_fpr(y_true, y_pred, sample_weight=weights_for_roc_auc, n=n)
+    roc_auc_score = auc(fpr, tpr)
+    
+    return roc_auc_score
+
+def weighted_roc_curve(y_true, y_score, sample_weight, n=25, title=""):
+    tpr, fpr_w = get_tpr_fpr(y_true, y_score, sample_weight=sample_weight, n=n)
+    roc_auc_w = np.around(auc(fpr_w, tpr), 4)
+    
+    fig, ax = plt.subplots(figsize=(6, 6), dpi=100)
+    ax.plot(range(2), range(2), 'grey', ls="--")
+    ax.plot(fpr_w, tpr, c="blue", label=f"roc auc weighted = {roc_auc_w}")
+    plt.grid(alpha=0.4)
+    plt.legend()
+    plt.title(title)
+    plt.show()
