@@ -26,11 +26,11 @@ The lstm model is based on the lstm model from the paper "Recurrent Convolutiona
     │   ├── constants.py
     │   ├── collect_dataset.py                          -> dataset creation for classical ml models
     │   ├── train.py                                    \
-    │   ├── utils.py                                    -> utilities for classical ml models
+    │   ├── utils.py                                     -> utilities for classical ml models
     │   ├── ml_utils.py                                 /
     │   ├── merge_features.ipynb                        -> notebook for merging collected features via collect_dataset.py in datasets
     │   ├── ml-models_magn_3_5.ipynb                    -> boosting models for earthquakes harder than magnitude 3.5
-    │   ├── ml-models_magn_6.ipynb                    -> boosting models for earthquakes harder than magnitude 6.0
+    │   ├── ml-models_magn_6.ipynb                      -> boosting models for earthquakes harder than magnitude 6.0
     │   └── validation.ipynb                            -> validating result boosting models
     └── lstm_models
         ├── Dataset_creation_orig_paper.ipynb           -> dataset creation for lstm model from original paper
