@@ -36,7 +36,7 @@ The lstm model is based on the lstm model from the paper "Recurrent Convolutiona
     │   ├── boosting_magn_6.ipynb                       -> boosting models for earthquakes harder than magnitude 6.0
     │   └── boosting_validation.ipynb                   -> validating result boosting models
     └── lstm_models
-    ├── data/models                                     -> trained models
+        ├── data/models                                     -> trained models
         │   ├── *
         ├── Dataset_creation_orig_paper.ipynb           -> dataset creation for lstm model from original paper
         ├── Dataset_creation_two_catalogs.ipynb         -> dataset creation for two datasets (data/catalogues/*.csv)
