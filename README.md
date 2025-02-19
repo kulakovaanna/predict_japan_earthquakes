@@ -29,16 +29,17 @@ The lstm model is based on the lstm model from the paper "Recurrent Convolutiona
     │   ├── utils.py                                     -> utilities for classical ml models
     │   ├── ml_utils.py                                 /
     │   ├── merge_features.ipynb                        -> notebook for merging collected features via collect_dataset.py in datasets
-    │   ├── ml-models_magn_3_5.ipynb                    -> boosting models for earthquakes harder than magnitude 3.5
-    │   ├── ml-models_magn_6.ipynb                      -> boosting models for earthquakes harder than magnitude 6.0
-    │   └── validation.ipynb                            -> validating result boosting models
+    │   ├── logreg_magn_3_5.ipynb                       -> logreg models for earthquakes harder than magnitude 3.5
+    │   ├── logreg_magn_6.ipynb                         -> logreg models for earthquakes harder than magnitude 6.0
+    │   ├── logreg_validation.ipynb                     -> validating result logreg models
+    │   ├── boosting_magn_3_5.ipynb                     -> boosting models for earthquakes harder than magnitude 3.5
+    │   ├── boosting_magn_6.ipynb                       -> boosting models for earthquakes harder than magnitude 6.0
+    │   └── boosting_validation.ipynb                   -> validating result boosting models
     └── lstm_models
+    ├── data/models                                     -> trained models
+        │   ├── *
         ├── Dataset_creation_orig_paper.ipynb           -> dataset creation for lstm model from original paper
         ├── Dataset_creation_two_catalogs.ipynb         -> dataset creation for two datasets (data/catalogues/*.csv)
-        ├── experiments                                 -> notebooks with experiments
-        │   ├── Learning_orig_paper.ipynb
-        │   ├── Learning_two_catalogs_magn3_5.ipynb
-        │   └── Learning_two_catalogs_magn6.ipynb
         ├── config.py                                   -> config file with constants and hyperparameteres
         ├── model.py                                    -> implementation of models
         ├── result_models.ipynb                         -> notebook with result lstm models
