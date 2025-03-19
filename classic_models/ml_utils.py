@@ -21,49 +21,57 @@ DATA_WITHOUT_AFT_PATH = "../data/catalogues/withoutAftCat.csv"
 glob_params_dict = {
     "magn_6_aft": {
         "DF_FOR_FEATURES": DATA_ORIG_PATH,
-        "min_magnitude": 6.0,
-        "trs": 6.0,
-        "window_days_step": 1,
+        "features_trs": [4.0, 6.0], # treshould for features
+        "min_magnitude": 3.0,       # treshould for field
+        "trs": 6.0,                 # treshould for target
+        "window_days_step": 10,
     },
     "magn_6_withoutaft": {
         "DF_FOR_FEATURES": DATA_WITHOUT_AFT_PATH,
-        "min_magnitude": 6.0,
+        "features_trs": [4.0, 6.0],
+        "min_magnitude": 3.0,
         "trs": 6.0,
-        "window_days_step": 1,
+        "window_days_step": 10,
     },
     "magn_6_aft_test": {
         "DF_FOR_FEATURES": DATA_ORIG_PATH,
-        "min_magnitude": 6.0,
+        "features_trs": [4.0, 6.0],
+        "min_magnitude": 3.0,
         "trs": 6.0,
         "window_days_step": 1,
     },
     "magn_6_withoutaft_test": {
         "DF_FOR_FEATURES": DATA_WITHOUT_AFT_PATH,
-        "min_magnitude": 6.0,
+        "features_trs": [4.0, 6.0],
+        "min_magnitude": 3.0,
         "trs": 6.0,
         "window_days_step": 1,
     },
     "magn_3_5_aft_train": {
         "DF_FOR_FEATURES": DATA_ORIG_PATH,
-        "min_magnitude": 3.5,
+        "features_trs": [3.5],
+        "min_magnitude": 3.0,
         "trs": 3.5,
         "window_days_step": 10,
     },
     "magn_3_5_withoutaft_train": {
         "DF_FOR_FEATURES": DATA_WITHOUT_AFT_PATH,
-        "min_magnitude": 3.5,
+        "features_trs": [3.5],
+        "min_magnitude": 3.0,
         "trs": 3.5,
         "window_days_step": 10,
     },
     "magn_3_5_aft_test": {
         "DF_FOR_FEATURES": DATA_ORIG_PATH,
-        "min_magnitude": 3.5,
+        "features_trs": [3.5],
+        "min_magnitude": 3.0,
         "trs": 3.5,
         "window_days_step": 1,
     },
     "magn_3_5_withoutaft_test": {
         "DF_FOR_FEATURES": DATA_WITHOUT_AFT_PATH,
-        "min_magnitude": 3.5,
+        "features_trs": [3.5],
+        "min_magnitude": 3.0,
         "trs": 3.5,
         "window_days_step": 1,
     },
@@ -109,7 +117,7 @@ def get_train_test_datasets(
         
     assert set(train_df.columns) == set(test_df.columns), f"{set(train_df.columns)}, {set(test_df.columns)}"
     
-    print("get_features_dict:\n", str(get_features_dict(train_df.columns)).replace("], ", "]\n"))
+    # print("get_features_dict:\n", str(get_features_dict(train_df.columns)).replace("], ", "]\n"))
     print(f"\ntrain dates: {np.sort(train_df.dt.unique())[0]} — {np.sort(train_df.dt.unique())[-1]}")
     print(f"test dates: {np.sort(test_df.dt.unique())[0]} — {np.sort(test_df.dt.unique())[-1]}")
     print(f"\ntrain: target==0: {len(train_df[train_df[target]==0])}, target==1: {len(train_df[train_df[target]==1])}")
@@ -168,10 +176,14 @@ def get_weights_for_roc_auc(y: pd.DataFrame, last_dt: str, trs: float = 3.0, nor
         
     return weights.to_numpy()
 
-def get_tpr_fpr(y_true, y_pred, sample_weight=None, n=25):
-    tpr, fpr, fpr_w = [], [], []
+def get_tpr_fpr(y_true, y_pred, sample_weight=None, n=25, return_alarm_rate=False):
+    true_positive, true, tpr, fpr, fpr_w = [], [], [], [], []
+    m = np.mean(y_pred)
+    sigma = np.std(y_pred)
+    max_trs = m+3*sigma
+    min_trs = np.min(y_pred) # because low alaram region of roc curve is important
     full_trs_list_ = [-0.001] + np.unique(y_pred).tolist() + [1.001]
-    trs_list_ = np.linspace(-0.001, 1.001, n)
+    trs_list_ = [-0.001] + np.linspace(min_trs, max_trs, n).tolist() + [1.001]
     trs_list = trs_list_ if len(trs_list_) < len(full_trs_list_) else full_trs_list_
 
     for trs in tqdm(trs_list, leave=False):
@@ -190,8 +202,12 @@ def get_tpr_fpr(y_true, y_pred, sample_weight=None, n=25):
         fpr_ = fp / (fp+tn)
         tpr.append(tpr_)
         fpr.append(fpr_)
-
-    return tpr, fpr
+        true_positive.append(tp)
+        true.append(tp+fn)
+    if return_alarm_rate:
+        return true_positive, true, tpr, fpr
+    else:
+        return tpr, fpr
 
 def plot_roc_curves(y_true, y_score, sample_weight, n=25, title=""):
     tpr, fpr = get_tpr_fpr(y_true, y_score, sample_weight=None, n=n)
